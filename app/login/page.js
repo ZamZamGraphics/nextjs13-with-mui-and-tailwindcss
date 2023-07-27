@@ -30,8 +30,17 @@ export default function Login() {
     common: "Somthing Wrong!",
   });
 
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setUser({
+      ...user,
+      [e.target.name]: value,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(user);
     setLoading(true);
   };
 
@@ -68,7 +77,7 @@ export default function Login() {
               label="Username or Email Address"
               name="username"
               value={user.username}
-              onChange={(e) => setUser({ ...user, username: e.target.value })}
+              onChange={handleChange}
               error={error.username && true}
               id={error.username && "standard-error"}
               helperText={error.username}
@@ -84,7 +93,7 @@ export default function Login() {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={user.password}
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                onChange={handleChange}
                 error={error.password && true}
                 id={error.password && "standard-error"}
                 endAdornment={
