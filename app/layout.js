@@ -9,7 +9,6 @@ import { useMemo } from "react";
 
 export default function RootLayout({ children }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
   const theme = useMemo(
     () =>
       createTheme({

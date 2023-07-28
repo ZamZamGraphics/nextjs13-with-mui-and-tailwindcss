@@ -15,8 +15,14 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { increment } from "../redux/features/counter/counterSlice";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.counter.value);
+
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const [loading, setLoading] = useState(false);
@@ -40,8 +46,9 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user);
-    setLoading(true);
+    dispatch(increment());
+    // console.log(user);
+    // setLoading(true);
   };
 
   return (
@@ -55,8 +62,13 @@ export default function Login() {
             boxShadow: 2,
           }}
         >
-          <Typography component="h5" sx={{ textAlign: "center" }} variant="h5">
-            Sign in
+          <Typography
+            className="text-blue-500"
+            component="h5"
+            sx={{ textAlign: "center" }}
+            variant="h5"
+          >
+            Sign in {count} times
           </Typography>
           {error.common && (
             <Alert sx={{ mt: 2, width: "100%" }} severity="error">
@@ -124,6 +136,12 @@ export default function Login() {
               Sign In
             </Button>
           </Box>
+          <Link
+            href="/dashboard"
+            className="text-blue-500 no-underline text-center"
+          >
+            <Typography variant="body2">Dashboard</Typography>
+          </Link>
         </Box>
       </Container>
     </div>
