@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { asyncToggleTheme } from "./themesSlice";
 
-export default function Theme() {
+export default function ThemeSwitch() {
   const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.theme.darkMode);
 

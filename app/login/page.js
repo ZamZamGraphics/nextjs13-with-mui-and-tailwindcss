@@ -18,6 +18,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "../redux/features/counter/counterSlice";
+import ThemeSwitch from "../redux/features/theme/ThemeSwitch";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ export default function Login() {
             boxShadow: 2,
           }}
         >
+          <ThemeSwitch />
           <Typography
             className="text-blue-500"
             component="h5"

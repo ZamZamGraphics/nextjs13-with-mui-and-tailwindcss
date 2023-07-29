@@ -2,23 +2,8 @@
 import "./globals.css";
 import { store } from "./redux/app/store";
 import { Provider } from "react-redux";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { useMemo } from "react";
 
 export default function RootLayout({ children }) {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: prefersDarkMode ? "dark" : "light",
-        },
-      }),
-    [prefersDarkMode]
-  );
-
   return (
     <html lang="en">
       <head>
@@ -28,10 +13,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <body id="__next">{children}</body>
-        </ThemeProvider>
+        <body id="__next">{children}</body>
       </Provider>
     </html>
   );
