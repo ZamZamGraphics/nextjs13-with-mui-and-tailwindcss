@@ -6,6 +6,7 @@ import {
   Container,
   FormControl,
   FormHelperText,
+  Grid,
   IconButton,
   Input,
   InputAdornment,
@@ -51,9 +52,15 @@ export default function Login() {
     // console.log(user);
     // setLoading(true);
   };
-
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100 dark:text-slate-400 dark:bg-slate-900">
+    <Grid
+      container
+      height="100vh"
+      alignItems="center"
+      justifyContent="center"
+      direction="column"
+      bgcolor="bodybg"
+    >
       <Container component="main" maxWidth="sm">
         <Box
           sx={{
@@ -146,6 +153,6 @@ export default function Login() {
           </Link>
         </Box>
       </Container>
-    </div>
+    </Grid>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material";
-import { useMemo } from "react";
-import themeSettings from "./redux/features/theme/theme";
 import { useSelector } from "react-redux";
+import { themeSettings } from "./redux/features/theme/theme";
+import { useMemo } from "react";
 
 export default function Template({ children }) {
   const darkMode = useSelector((state) => state.theme.darkMode);
