@@ -17,41 +17,38 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { increment } from "../redux/features/counter/counterSlice";
+import { useDispatch } from "react-redux";
 import ThemeSwitch from "../redux/features/theme/ThemeSwitch";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useLoginMutation } from "../redux/features/auth/authApi";
+
+const LoginSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 export default function Login() {
-  const dispatch = useDispatch();
-  const count = useSelector((state) => state.counter.value);
-
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-  });
-  const [error, setError] = useState({
-    username: "Username is required",
-    password: "Password is required",
-    common: "Somthing Wrong!",
+  const [error, setError] = useState("");
+
+  const [login, { data, isLoading, error: responseError }] = useLoginMutation();
+
+  console.log(responseError);
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: LoginSchema,
+    onSubmit: (values) => {
+      setError("");
+      login(values);
+    },
   });
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setUser({
-      ...user,
-      [e.target.name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(increment());
-    // console.log(user);
-    // setLoading(true);
-  };
   return (
     <Grid
       container
@@ -77,46 +74,47 @@ export default function Login() {
             sx={{ textAlign: "center" }}
             variant="h5"
           >
-            Sign in {count} times
+            Sign in
           </Typography>
-          {error.common && (
+
+          {error && (
             <Alert sx={{ mt: 2, width: "100%" }} severity="error">
-              {error.common}
+              {error.data.errors.msg}
             </Alert>
           )}
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+
+          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required
+              // required
               fullWidth
               variant="standard"
               label="Username or Email Address"
               name="username"
-              value={user.username}
-              onChange={handleChange}
-              error={error.username && true}
-              id={error.username && "standard-error"}
-              helperText={error.username}
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              id={formik.errors.username && "standard-error"}
+              error={formik.touched.username && Boolean(formik.errors.username)}
+              helperText={formik.touched.username && formik.errors.username}
             />
             <FormControl fullWidth sx={{ mt: 1 }} variant="standard">
               <InputLabel
                 htmlFor="standard-adornment-password"
-                error={error.password && true}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
               >
                 Password
               </InputLabel>
               <Input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                value={user.password}
-                onChange={handleChange}
-                error={error.password && true}
-                id={error.password && "standard-error"}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                id={formik.errors.password && "standard-error"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -130,9 +128,11 @@ export default function Login() {
               />
               <FormHelperText
                 id="passowrd-helper-text"
-                error={error.password && true}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
               >
-                {error.password}
+                {formik.touched.password && formik.errors.password}
               </FormHelperText>
             </FormControl>
             <Button
@@ -140,7 +140,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ borderRadius: "9999px", mt: 3, mb: 2 }}
-              disabled={loading}
+              disabled={isLoading}
             >
               Sign In
             </Button>
