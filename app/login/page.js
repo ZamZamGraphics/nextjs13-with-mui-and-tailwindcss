@@ -15,13 +15,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 import ThemeSwitch from "../redux/features/theme/ThemeSwitch";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useLoginMutation } from "../redux/features/auth/authApi";
+import { redirect } from "next/navigation";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -35,7 +35,14 @@ export default function Login() {
 
   const [login, { data, isLoading, error: responseError }] = useLoginMutation();
 
-  console.log(responseError);
+  useEffect(() => {
+    if (responseError?.data) {
+      setError(responseError.data);
+    }
+    if (data?.token) {
+      redirect("/dashboard");
+    }
+  }, [data, responseError]);
 
   const formik = useFormik({
     initialValues: {
@@ -79,7 +86,7 @@ export default function Login() {
 
           {error && (
             <Alert sx={{ mt: 2, width: "100%" }} severity="error">
-              {error.data.errors.msg}
+              {error.errors.msg}
             </Alert>
           )}
 
