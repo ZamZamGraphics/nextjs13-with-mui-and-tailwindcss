@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.almadinait.com/v1",
+    baseUrl: "http://localhost:4000/v1",
     prepareHeaders: async (headers, { getState, endpoint }) => {
       const token = getState()?.auth?.accessToken;
       if (token) {
@@ -12,6 +12,7 @@ export const apiSlice = createApi({
 
       return headers;
     },
+    credentials: "include",
   }),
   tagTypes: [],
   endpoints: (builder) => ({}),

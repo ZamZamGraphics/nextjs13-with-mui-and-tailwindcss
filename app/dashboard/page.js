@@ -9,7 +9,7 @@ export default function Home() {
 
   const logout = () => {
     dispatch(userLoggedOut());
-    localStorage.removeItem("auth");
+    localStorage.removeItem("loggedIn");
   };
 
   return (

@@ -8,10 +8,12 @@ export default function useAuthCheck() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    const localAuth = localStorage?.getItem("auth");
+    const localAuth = localStorage?.getItem("loggedIn");
 
     if (localAuth) {
+      // accessToken from cookie
       const auth = JSON.parse(localAuth);
+
       if (auth?.accessToken) {
         dispatch(
           userLoggedIn({

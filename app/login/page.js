@@ -39,7 +39,14 @@ export default function Login() {
     if (responseError?.data) {
       setError(responseError.data);
     }
-    if (data?.token) {
+    if (responseError?.error) {
+      setError({
+        errors: {
+          msg: "Network Error",
+        },
+      });
+    }
+    if (data?.success) {
       redirect("/dashboard");
     }
   }, [data, responseError]);
