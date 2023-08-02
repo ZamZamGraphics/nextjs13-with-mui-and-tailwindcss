@@ -1,15 +1,18 @@
 "use client";
 import { Button, Grid } from "@mui/material";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { userLoggedOut } from "../redux/features/auth/authSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
+  const [cookie, setCookie, removeCookie] = useCookies();
 
   const logout = () => {
     dispatch(userLoggedOut());
-    localStorage.removeItem("loggedIn");
+    setCookie("loggedIn", false, { path: "/" });
+    removeCookie("accessToken", { path: "/" });
   };
 
   return (
