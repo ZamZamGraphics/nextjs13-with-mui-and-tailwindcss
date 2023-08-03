@@ -1,11 +1,13 @@
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { userLoggedIn, userLoggedOut } from "../redux/features/auth/authSlice";
+import { userLoggedIn } from "../redux/features/auth/authSlice";
+import { useState } from "react";
 
-export default function AuthCheck({ children }) {
+export default function useAuthCheck() {
   const [cookies] = useCookies();
   const dispatch = useDispatch();
+  const [authChecked, setAuthChecked] = useState(false);
 
   const accessToken = cookies?.accessToken;
   const loggedIn = cookies?.loggedIn;
@@ -18,7 +20,8 @@ export default function AuthCheck({ children }) {
         })
       );
     }
+    setAuthChecked(true);
   }, [dispatch, accessToken, loggedIn]);
 
-  return children;
+  return authChecked;
 }

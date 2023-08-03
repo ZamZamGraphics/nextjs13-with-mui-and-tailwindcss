@@ -28,6 +28,11 @@ export default function Home() {
           Login
         </Button>
       </Link>
+      <Link href="/dashboard/users/profile">
+        <Button variant="contained" color="primary">
+          Profile
+        </Button>
+      </Link>
       <h1 className="text-blue-500">Dashboard Home Page</h1>
       <Button variant="contained" color="warning" onClick={logout}>
         Logout
