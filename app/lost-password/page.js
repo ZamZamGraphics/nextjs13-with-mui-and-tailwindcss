@@ -4,42 +4,36 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  FormHelperText,
   Grid,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
   TextField,
   Typography,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useLoginMutation } from "../redux/features/auth/authApi";
+import { useForgotPasswordMutation } from "../redux/features/auth/authApi";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import logoDark from "../../public/logo-dark.svg";
 import logoLight from "../../public/logo-light.svg";
-import ThemeSwitch from "../redux/features/theme/ThemeSwitch";
 import { useSelector } from "react-redux";
+import axios from "../util/axios";
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required"),
-  password: Yup.string().required("Password is required"),
+  email: Yup.string()
+    .required("User Email is required")
+    .email("must be a valid email"),
 });
 
-export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const logo = darkMode ? logoLight : logoDark;
 
-  const [login, { data, isLoading, error: responseError }] = useLoginMutation();
+  const [forgotPassword, { data, isLoading, error: responseError }] =
+    useForgotPasswordMutation();
 
   useEffect(() => {
     if (responseError?.data) {
@@ -52,20 +46,20 @@ export default function Login() {
         },
       });
     }
-    if (data?.success) {
-      redirect("/dashboard");
+    if (data) {
+      // redirect("/login");
     }
   }, [data, responseError]);
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      email: "",
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
       setError("");
-      login(values);
+      setEmail(values);
+      forgotPassword(values);
     },
   });
 
@@ -87,7 +81,6 @@ export default function Login() {
             boxShadow: 2,
           }}
         >
-          <ThemeSwitch />
           <Box display="flex" justifyContent="center" mb={2}>
             <Image
               src={logo}
@@ -103,8 +96,17 @@ export default function Login() {
             sx={{ textAlign: "center" }}
             variant="h5"
           >
-            Sign in
+            Recover your password
           </Typography>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", marginTop: "20px" }}
+          >
+            <strong>Enter the email</strong> that you used when register to
+            recover your password. You will receive a{" "}
+            <strong>password reset link.</strong>
+          </Typography>
+
           {error && (
             <Alert sx={{ mt: 2, width: "100%" }} severity="error">
               {error.errors.msg}
@@ -117,52 +119,14 @@ export default function Login() {
               // required
               fullWidth
               variant="standard"
-              label="Username or Email Address"
-              name="username"
-              value={formik.values.username}
+              label="User Email Address"
+              name="email"
+              value={formik.values.email}
               onChange={formik.handleChange}
-              id={formik.errors.username && "standard-error"}
-              error={formik.touched.username && Boolean(formik.errors.username)}
-              helperText={formik.touched.username && formik.errors.username}
+              id={formik.errors.email && "standard-error"}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
-            <FormControl fullWidth sx={{ mt: 1 }} variant="standard">
-              <InputLabel
-                htmlFor="standard-adornment-password"
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-              >
-                Password
-              </InputLabel>
-              <Input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                id={formik.errors.password && "standard-error"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-              <FormHelperText
-                id="passowrd-helper-text"
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-              >
-                {formik.touched.password && formik.errors.password}
-              </FormHelperText>
-            </FormControl>
             <Button
               type="submit"
               fullWidth
@@ -170,14 +134,14 @@ export default function Login() {
               sx={{ borderRadius: "9999px", mt: 3, mb: 2 }}
               disabled={isLoading}
             >
-              Sign In
+              Send link
             </Button>
           </Box>
           <Link
-            href="/lost-password"
+            href="/login"
             className="text-blue-500 no-underline text-center"
           >
-            <Typography variant="body1">Forgot password?</Typography>
+            <Typography variant="body1">Login</Typography>
           </Link>
         </Box>
       </Container>

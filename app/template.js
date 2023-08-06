@@ -1,5 +1,5 @@
 "use client";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Backdrop, CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { themeSettings } from "./redux/features/theme/theme";
@@ -13,7 +13,10 @@ export default function Template({ children }) {
   const authChecked = useAuthCheck();
 
   return !authChecked ? (
-    <div>Checking authentication....</div>
+    <Backdrop
+      sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={true}
+    />
   ) : (
     <ThemeProvider theme={theme}>
       <CssBaseline />
