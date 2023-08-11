@@ -1,5 +1,6 @@
 module.exports = {
   env: {
+    appTitle: "AL MADINA IT",
     appURL: "http://localhost:3000",
     serverURL: "http://localhost:4000",
     emailHost: "mail.almadinait.com",

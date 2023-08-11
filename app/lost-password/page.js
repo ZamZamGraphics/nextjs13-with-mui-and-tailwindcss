@@ -18,7 +18,6 @@ import Image from "next/image";
 import logoDark from "../../public/logo-dark.svg";
 import logoLight from "../../public/logo-light.svg";
 import { useSelector } from "react-redux";
-import axios from "../util/axios";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,7 +26,6 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const logo = darkMode ? logoLight : logoDark;
@@ -58,7 +56,6 @@ export default function ForgotPassword() {
     validationSchema: LoginSchema,
     onSubmit: (values) => {
       setError("");
-      setEmail(values);
       forgotPassword(values);
     },
   });

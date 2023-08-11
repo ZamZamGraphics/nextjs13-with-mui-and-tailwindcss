@@ -16,8 +16,17 @@ export const sendEmail = async (data) => {
     ...smtpOptions,
   });
 
-  return await transporter.sendMail({
-    from: `AL-MADINA IT ${process.env.emailUsername}`,
-    ...data,
-  });
+  await transporter.sendMail(
+    {
+      from: `${process.env.appTitle} ${process.env.emailUsername}`,
+      ...data,
+    },
+    (err, info) => {
+      if (!err) {
+        return info.response;
+      } else {
+        return err;
+      }
+    }
+  );
 };

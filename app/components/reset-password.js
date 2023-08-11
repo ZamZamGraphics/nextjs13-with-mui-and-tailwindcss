@@ -13,6 +13,7 @@ import {
 import * as React from "react";
 
 const baseUrl = process.env.appURL;
+const appTitle = process.env.appTitle;
 const logo = `${process.env.serverURL}/assets/logo.png`;
 
 export const ResetPasswordEmail = ({ fullName, token, userId }) => {
@@ -20,7 +21,7 @@ export const ResetPasswordEmail = ({ fullName, token, userId }) => {
   return (
     <Html>
       <Head />
-      <Preview>AL MADINA IT reset your password</Preview>
+      <Preview>{appTitle} reset your password</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section>
@@ -29,7 +30,7 @@ export const ResetPasswordEmail = ({ fullName, token, userId }) => {
               style={logoStyle}
               width="225"
               height="39"
-              alt="AL MADINA IT"
+              alt={appTitle}
             />
           </Section>
           <Hr style={hr} />
@@ -37,7 +38,7 @@ export const ResetPasswordEmail = ({ fullName, token, userId }) => {
             <Text style={heading}>Hi {fullName},</Text>
             <Text style={text}>
               Someone recently requested a password change for your{" "}
-              <strong>AL MADINA IT </strong>
+              <strong>{appTitle} </strong>
               account. If this was you, you can set a new password here:
             </Text>
             <Section style={{ textAlign: "center" }}>
@@ -56,11 +57,11 @@ export const ResetPasswordEmail = ({ fullName, token, userId }) => {
             <Text style={text}>
               Thank you.
               <br />
-              <strong>AL MADINA IT</strong>
+              <strong>{appTitle}</strong>
             </Text>
             <Hr style={hr} />
             <Text style={footer}>
-              Copyright ©2022 AL-MADINA IT | All rights reserved.
+              Copyright ©2022 {appTitle} | All rights reserved.
             </Text>
           </Section>
         </Container>
