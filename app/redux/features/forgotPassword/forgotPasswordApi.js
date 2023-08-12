@@ -2,8 +2,13 @@ import { apiSlice } from "../api/apiSlice";
 import axios from "../../../util/axios";
 import { sendEmail } from "./forgotPasswordSlice";
 
-export const sendPasswordResetEmail = async (data) => {
-  const response = await axios.post("/send", data);
+export const sendPasswordResetEmail = async (userData) => {
+  const response = await axios.post("/send", userData);
+  const { data } = response.data;
+
+  if (!data.success) {
+    return data.error;
+  }
   return response.data;
 };
 
@@ -26,7 +31,7 @@ export const forgotPasswordApi = apiSlice.injectEndpoints({
             subject: subject,
             email: arg.email,
           };
-          dispatch(sendEmail({ message: data }));
+          dispatch(sendEmail(data));
         } catch (err) {
           // do nothing
           console.log(err);
@@ -37,4 +42,4 @@ export const forgotPasswordApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const {} = forgotPasswordApi;
+export const { useForgotPasswordMutation } = forgotPasswordApi;

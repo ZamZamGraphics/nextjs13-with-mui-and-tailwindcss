@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useForgotPasswordMutation } from "../redux/features/auth/authApi";
+import { useForgotPasswordMutation } from "../redux/features/forgotPassword/forgotPasswordApi";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import logoDark from "../../public/logo-dark.svg";
@@ -30,8 +30,15 @@ export default function ForgotPassword() {
   const darkMode = useSelector((state) => state.theme.darkMode);
   const logo = darkMode ? logoLight : logoDark;
 
-  const [forgotPassword, { data, isLoading, error: responseError }] =
+  const [forgotPassword, { data, isLoading: loading, error: responseError }] =
     useForgotPasswordMutation();
+
+  const {
+    message,
+    isLoading,
+    isError,
+    error: sendEmailError,
+  } = useSelector((state) => state.forgotPassword);
 
   useEffect(() => {
     if (responseError?.data) {
@@ -48,6 +55,18 @@ export default function ForgotPassword() {
       // redirect("/login");
     }
   }, [data, responseError]);
+
+  if (!isLoading && isError)
+    setError({
+      errors: {
+        msg: sendEmailError,
+      },
+    });
+
+  {
+    isError && console.log(`Error: ${JSON.stringify(sendEmailError)}`);
+    message && console.log(`Message: ${JSON.stringify(message)}`);
+  }
 
   const formik = useFormik({
     initialValues: {

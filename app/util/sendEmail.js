@@ -6,27 +6,23 @@ const smtpOptions = {
   port: process.env.emailPort,
   secure: true,
   auth: {
-    user: process.env.emailUsername,
+    user: "process.env.emailUsername",
     pass: process.env.emailPassword,
   },
 };
 
 export const sendEmail = async (data) => {
-  const transporter = nodemailer.createTransport({
-    ...smtpOptions,
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      ...smtpOptions,
+    });
 
-  await transporter.sendMail(
-    {
+    await transporter.sendMail({
       from: `${process.env.appTitle} ${process.env.emailUsername}`,
       ...data,
-    },
-    (err, info) => {
-      if (!err) {
-        return info.response;
-      } else {
-        return err;
-      }
-    }
-  );
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.response };
+  }
 };
