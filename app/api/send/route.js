@@ -16,6 +16,9 @@ export async function POST(req) {
       ),
     });
 
+    if (!data.success) {
+      return NextResponse.json({ error: data.error }, { status: 400 });
+    }
     return NextResponse.json({ data });
   } catch (error) {
     return NextResponse.json(

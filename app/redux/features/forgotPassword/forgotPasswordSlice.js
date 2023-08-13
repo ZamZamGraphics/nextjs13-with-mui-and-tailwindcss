@@ -11,9 +11,13 @@ const initialState = {
 // async thunk
 export const sendEmail = createAsyncThunk(
   "forgotPassword/sendEmail",
-  async (data) => {
-    const response = await sendPasswordResetEmail(data);
-    return response;
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await sendPasswordResetEmail(data);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
   }
 );
 
@@ -34,7 +38,7 @@ const forgotPasswordSlice = createSlice({
       .addCase(sendEmail.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });
