@@ -30,50 +30,34 @@ export default function ForgotPassword() {
   const darkMode = useSelector((state) => state.theme.darkMode);
   const logo = darkMode ? logoLight : logoDark;
 
-  const [forgotPassword, { data, isLoading: loading, error: responseError }] =
+  const [forgotPassword, { data, error: responseError }] =
     useForgotPasswordMutation();
-
-  {
-    data && console.log(`from Mutation Data: ${JSON.stringify(data)}`);
-    responseError &&
-      console.log(`from Mutation Error: ${JSON.stringify(responseError)}`);
-  }
 
   const {
     message,
     isLoading,
-    isError,
     error: sendEmailError,
   } = useSelector((state) => state.forgotPassword);
-  {
-    message &&
-      console.log(`from Send Email message: ${JSON.stringify(message)}`);
-    sendEmailError &&
-      console.log(`from Send Email Error: ${JSON.stringify(sendEmailError)}`);
-  }
 
-  // useEffect(() => {
-  //   // if (responseError?.data) {
-  //   //   setError(responseError.data);
-  //   // }
-  //   if (responseError?.error) {
-  //     setError({
-  //       errors: {
-  //         msg: "Network Error",
-  //       },
-  //     });
-  //   }
-  //   if (data) {
-  //     // redirect("/login");
-  //   }
-  // }, [data, responseError]);
+  useEffect(() => {
+    responseError?.data && setError(responseError.data);
+    responseError?.error &&
+      setError({
+        errors: {
+          msg: "Network Error",
+        },
+      });
 
-  // if (!isLoading && isError)
-  //   setError({
-  //     errors: {
-  //       msg: sendEmailError,
-  //     },
-  //   });
+    if (data) {
+      sendEmailError &&
+        setError({
+          errors: {
+            msg: sendEmailError.error,
+          },
+        });
+      message && redirect("/login");
+    }
+  }, [data, responseError, sendEmailError, message]);
 
   const formik = useFormik({
     initialValues: {
@@ -130,11 +114,11 @@ export default function ForgotPassword() {
             <strong>password reset link.</strong>
           </Typography>
 
-          {/* {error && (
+          {error && (
             <Alert sx={{ mt: 2, width: "100%" }} severity="error">
               {error.errors.msg}
             </Alert>
-          )} */}
+          )}
 
           <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
             <TextField

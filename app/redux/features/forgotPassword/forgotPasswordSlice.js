@@ -14,7 +14,10 @@ export const sendEmail = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await sendPasswordResetEmail(data);
-      return response.data;
+      if (response.data.data.success) {
+        const data = JSON.parse(response.config.data);
+        return data.msg;
+      }
     } catch (err) {
       return rejectWithValue(err.response.data);
     }

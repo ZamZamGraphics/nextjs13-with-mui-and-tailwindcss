@@ -35,6 +35,8 @@ const LoginSchema = Yup.object().shape({
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const { message } = useSelector((state) => state.forgotPassword);
+  const [msg, setMessage] = useState(message);
   const [error, setError] = useState("");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const logo = darkMode ? logoLight : logoDark;
@@ -65,6 +67,7 @@ export default function Login() {
     validationSchema: LoginSchema,
     onSubmit: (values) => {
       setError("");
+      setMessage("");
       login(values);
     },
   });
@@ -108,6 +111,12 @@ export default function Login() {
           {error && (
             <Alert sx={{ mt: 2, width: "100%" }} severity="error">
               {error.errors.msg}
+            </Alert>
+          )}
+
+          {msg && (
+            <Alert sx={{ mt: 2, width: "100%" }} severity="success">
+              {msg}
             </Alert>
           )}
 

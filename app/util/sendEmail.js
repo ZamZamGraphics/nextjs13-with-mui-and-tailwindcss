@@ -6,7 +6,7 @@ const smtpOptions = {
   port: process.env.emailPort,
   secure: true,
   auth: {
-    user: "process.env.emailUsername",
+    user: process.env.emailUsername,
     pass: process.env.emailPassword,
   },
 };
