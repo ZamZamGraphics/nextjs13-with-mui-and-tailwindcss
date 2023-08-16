@@ -1,10 +1,23 @@
 import { apiSlice } from "../api/apiSlice";
 import axios from "../../../util/axios";
-import { sendEmail } from "./forgotPasswordSlice";
+import {
+  sendEmail,
+  removeMessage,
+  sendResetSuccessEmail,
+} from "./forgotPasswordSlice";
 
 export const sendPasswordResetEmail = async (userData) => {
   try {
-    const response = axios.post("/send", userData);
+    const response = axios.post("/send-reset-email", userData);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const sendResetSuccess = async (data) => {
+  try {
+    const response = axios.post("/send-reset-success", data);
     return response;
   } catch (err) {
     return err;
@@ -28,16 +41,38 @@ export const forgotPasswordApi = apiSlice.injectEndpoints({
           const data = {
             ...result.data,
             subject: subject,
-            email: arg.email,
           };
           dispatch(sendEmail(data));
         } catch (err) {
           // do nothing
         }
       },
-      // end
+    }),
+    resetPassword: builder.mutation({
+      query: ({ password, queryURL }) => ({
+        url: `/users/reset?${queryURL}`,
+        method: "POST",
+        body: password,
+      }),
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          dispatch(removeMessage());
+          const result = await queryFulfilled;
+
+          const subject = "Password has been successfully changed";
+          const data = {
+            ...result.data,
+            subject: subject,
+          };
+          dispatch(sendResetSuccessEmail(data));
+        } catch (err) {
+          // do nothing
+        }
+      },
     }),
   }),
 });
 
-export const { useForgotPasswordMutation } = forgotPasswordApi;
+export const { useForgotPasswordMutation, useResetPasswordMutation } =
+  forgotPasswordApi;

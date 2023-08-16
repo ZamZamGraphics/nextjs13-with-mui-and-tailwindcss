@@ -13,6 +13,8 @@ export default function useAuthCheck() {
   const loggedIn = cookies?.loggedIn;
 
   useEffect(() => {
+    console.log(loggedIn, accessToken);
+
     if (accessToken && loggedIn) {
       dispatch(
         userLoggedIn({

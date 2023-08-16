@@ -49,12 +49,7 @@ export default function ForgotPassword() {
       });
 
     if (data) {
-      sendEmailError &&
-        setError({
-          errors: {
-            msg: sendEmailError.error,
-          },
-        });
+      sendEmailError && setError(sendEmailError);
       message && redirect("/login");
     }
   }, [data, responseError, sendEmailError, message]);

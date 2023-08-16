@@ -24,7 +24,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "app/api/send/route.js"
+    "app/api/send-reset-email/route.js"
   ],
   "exclude": ["node_modules"]
 }
